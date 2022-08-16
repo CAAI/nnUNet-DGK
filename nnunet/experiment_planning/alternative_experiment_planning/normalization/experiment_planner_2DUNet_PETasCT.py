@@ -13,20 +13,30 @@
 #    limitations under the License.
 
 
+from collections import OrderedDict
+
 from nnunet.experiment_planning.experiment_planner_baseline_2DUNet_v21 import ExperimentPlanner2D_v21
 from nnunet.paths import *
 
 
-class ExperimentPlanner2D_v21_RGB_scaleTo_0_1(ExperimentPlanner2D_v21):
+class ExperimentPlannerPETasCT_2D(ExperimentPlanner2D_v21):
     """
-    used by tutorial nnunet.tutorials.custom_preprocessing
+    Preprocesses all data in CT mode
     """
     def __init__(self, folder_with_cropped_data, preprocessed_output_folder):
-        super().__init__(folder_with_cropped_data, preprocessed_output_folder)
-        self.data_identifier = "nnUNet_RGB_scaleTo_0_1"
-        self.plans_fname = join(self.preprocessed_output_folder, "nnUNet_RGB_scaleTo_0_1" + "_plans_2D.pkl")
+        super(ExperimentPlannerPETasCT_2D, self).__init__(folder_with_cropped_data, preprocessed_output_folder)
+        self.data_identifier = "nnUNetPlansv2.1_PETasCT2D"
+        self.plans_fname = join(self.preprocessed_output_folder, "nnUNetPlansv2.1_PETasCT2D" + "_plans_2D.pkl")
 
-        # The custom preprocessor class we intend to use is GenericPreprocessor_scale_uint8_to_0_1. It must be located
-        # in nnunet.preprocessing (any file and submodule) and will be found by its name. Make sure to always define
-        # unique names!
-        self.preprocessor_name = 'GenericPreprocessor_no_norm_of_PET'
+    def determine_normalization_scheme(self):
+        schemes = OrderedDict()
+        modalities = self.dataset_properties['modalities']
+        num_modalities = len(list(modalities.keys()))
+
+        for i in range(num_modalities):
+            if modalities[i] == "CT":
+                schemes[i] = "CT"
+            else:
+                schemes[i] = "CT"
+        return schemes
+

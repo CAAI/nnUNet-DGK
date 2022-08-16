@@ -11,13 +11,16 @@
 #    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
+#
+#    Modified 2022-03-01 by David Kovacs Petersen to do no normalization of PET. 
+
 
 
 from nnunet.experiment_planning.experiment_planner_baseline_2DUNet_v21 import ExperimentPlanner2D_v21
 from nnunet.paths import *
 
 
-class ExperimentPlanner2D_v21_RGB_scaleTo_0_1(ExperimentPlanner2D_v21):
+class ExperimentPlanner2D_v21_no_pet_norm(ExperimentPlanner2D_v21):
     """
     used by tutorial nnunet.tutorials.custom_preprocessing
     """
@@ -29,4 +32,4 @@ class ExperimentPlanner2D_v21_RGB_scaleTo_0_1(ExperimentPlanner2D_v21):
         # The custom preprocessor class we intend to use is GenericPreprocessor_scale_uint8_to_0_1. It must be located
         # in nnunet.preprocessing (any file and submodule) and will be found by its name. Make sure to always define
         # unique names!
-        self.preprocessor_name = 'GenericPreprocessor_no_norm_of_PET'
+        self.preprocessor_name = 'preprocessor_no_norm_of_PET_2D'
